@@ -1,7 +1,36 @@
+
 from datetime import datetime
+import enum
 from flask_wtf import Form
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField
-from wtforms.validators import DataRequired, AnyOf, URL
+from wtforms.validators import DataRequired, AnyOf, URL, Regexp
+from wtforms_sqlalchemy.fields import QuerySelectMultipleField
+
+class Genres(enum.Enum):
+    Alternative = 'Alternative'
+    Blues= 'Blues'
+    Classical = 'Classical'
+    Country = 'Country'
+    Electronic = 'Electronic'
+    Folk = 'Folk'
+    Funk = 'Funk'
+    Hip_Hop = 'Hip-Hop'
+    Heavy_Metal = 'Heavy Metal'
+    Instrumental = 'Instrumental'
+    Jazz = 'Jazz'
+    Musical_Theatre = 'Musical Theatre'
+    Pop = 'Pop'
+    Punk = 'Punk'
+    R_B = 'R&B'
+    Reggae = 'Reggae'
+    Rock_n_Roll = 'Rock n Roll'
+    Soul = 'Soul'
+    Other = 'Other'
+
+    @staticmethod
+    def fetch_genres():
+        return [genre.value for genre in Genres]
+
 
 class ShowForm(Form):
     artist_id = StringField(
@@ -83,50 +112,52 @@ class VenueForm(Form):
         'address', validators=[DataRequired()]
     )
     phone = StringField(
-        'phone'
+        'phone', validators=[DataRequired(), Regexp('\d{3}-\d{3}-\d{4}', message = "Follow the format (XXX-XXX-XXXX)")]
     )
     image_link = StringField(
-        'image_link'
+        'image_link', validators=[URL()]
     )
-    genres = SelectMultipleField(
+
+    genres = QuerySelectMultipleField(
         # TODO implement enum restriction
         'genres', validators=[DataRequired()],
-        choices=[
-            ('Alternative', 'Alternative'),
-            ('Blues', 'Blues'),
-            ('Classical', 'Classical'),
-            ('Country', 'Country'),
-            ('Electronic', 'Electronic'),
-            ('Folk', 'Folk'),
-            ('Funk', 'Funk'),
-            ('Hip-Hop', 'Hip-Hop'),
-            ('Heavy Metal', 'Heavy Metal'),
-            ('Instrumental', 'Instrumental'),
-            ('Jazz', 'Jazz'),
-            ('Musical Theatre', 'Musical Theatre'),
-            ('Pop', 'Pop'),
-            ('Punk', 'Punk'),
-            ('R&B', 'R&B'),
-            ('Reggae', 'Reggae'),
-            ('Rock n Roll', 'Rock n Roll'),
-            ('Soul', 'Soul'),
-            ('Other', 'Other'),
-        ]
+        query_factory = Genres.fetch_genres,
+                            get_pk=lambda a: a,
+                            get_label=lambda a: a
+        # choices=[
+        #     ('Alternative', 'Alternative'),
+        #     ('Blues', 'Blues'),
+        #     ('Classical', 'Classical'),
+        #     ('Country', 'Country'),
+        #     ('Electronic', 'Electronic'),
+        #     ('Folk', 'Folk'),
+        #     ('Funk', 'Funk'),
+        #     ('Hip-Hop', 'Hip-Hop'),
+        #     ('Heavy Metal', 'Heavy Metal'),
+        #     ('Instrumental', 'Instrumental'),
+        #     ('Jazz', 'Jazz'),
+        #     ('Musical Theatre', 'Musical Theatre'),
+        #     ('Pop', 'Pop'),
+        #     ('Punk', 'Punk'),
+        #     ('R&B', 'R&B'),
+        #     ('Reggae', 'Reggae'),
+        #     ('Rock n Roll', 'Rock n Roll'),
+        #     ('Soul', 'Soul'),
+        #     ('Other', 'Other'),
+        # ]
     )
     facebook_link = StringField(
         'facebook_link', validators=[URL()]
     )
     website_link = StringField(
-        'website_link'
+        'website_link', validators=[URL()]
     )
 
-    seeking_talent = BooleanField( 'seeking_talent' )
+    seeking_talent = BooleanField(False)
 
     seeking_description = StringField(
         'seeking_description'
     )
-
-
 
 class ArtistForm(Form):
     name = StringField(
@@ -193,45 +224,53 @@ class ArtistForm(Form):
     )
     phone = StringField(
         # TODO implement validation logic for phone 
-        'phone'
+        'phone', validators=[DataRequired(), Regexp('\d{3}-\d{3}-\d{4}', message = "Follow the format (XXX-XXX-XXXX)")]
     )
     image_link = StringField(
-        'image_link'
+        'image_link', validators=[URL()]
     )
-    genres = SelectMultipleField(
+    # genres = SelectMultipleField(
+    #     'genres', validators=[DataRequired()],
+    #     choices=[
+    #         ('Alternative', 'Alternative'),
+    #         ('Blues', 'Blues'),
+    #         ('Classical', 'Classical'),
+    #         ('Country', 'Country'),
+    #         ('Electronic', 'Electronic'),
+    #         ('Folk', 'Folk'),
+    #         ('Funk', 'Funk'),
+    #         ('Hip-Hop', 'Hip-Hop'),
+    #         ('Heavy Metal', 'Heavy Metal'),
+    #         ('Instrumental', 'Instrumental'),
+    #         ('Jazz', 'Jazz'),
+    #         ('Musical Theatre', 'Musical Theatre'),
+    #         ('Pop', 'Pop'),
+    #         ('Punk', 'Punk'),
+    #         ('R&B', 'R&B'),
+    #         ('Reggae', 'Reggae'),
+    #         ('Rock n Roll', 'Rock n Roll'),
+    #         ('Soul', 'Soul'),
+    #         ('Other', 'Other'),
+    #     ]
+    #  )
+    genres = QuerySelectMultipleField(
+        # TODO implement enum restriction
         'genres', validators=[DataRequired()],
-        choices=[
-            ('Alternative', 'Alternative'),
-            ('Blues', 'Blues'),
-            ('Classical', 'Classical'),
-            ('Country', 'Country'),
-            ('Electronic', 'Electronic'),
-            ('Folk', 'Folk'),
-            ('Funk', 'Funk'),
-            ('Hip-Hop', 'Hip-Hop'),
-            ('Heavy Metal', 'Heavy Metal'),
-            ('Instrumental', 'Instrumental'),
-            ('Jazz', 'Jazz'),
-            ('Musical Theatre', 'Musical Theatre'),
-            ('Pop', 'Pop'),
-            ('Punk', 'Punk'),
-            ('R&B', 'R&B'),
-            ('Reggae', 'Reggae'),
-            ('Rock n Roll', 'Rock n Roll'),
-            ('Soul', 'Soul'),
-            ('Other', 'Other'),
-        ]
-     )
+        query_factory = Genres.fetch_genres,
+                            get_pk=lambda a: a,
+                            get_label=lambda a: a
+    )
+
     facebook_link = StringField(
         # TODO implement enum restriction
         'facebook_link', validators=[URL()]
-     )
+    )
 
     website_link = StringField(
-        'website_link'
+        'website_link', validators=[URL()]
      )
 
-    seeking_venue = BooleanField( 'seeking_venue' )
+    seeking_venue = BooleanField( False )
 
     seeking_description = StringField(
             'seeking_description'

@@ -21,5 +21,35 @@
 	<div class="col-sm-6 hidden-sm hidden-xs">
 		<img id="front-splash" src="{{ url_for('static',filename='img/front-splash.jpg') }}" alt="Front Photo of Musical Band" />
 	</div>
+	{% if venues %}
+		<section class="col-sm-6 tile-show">
+			<h4 style="text-align: left; font-size:1.5em;">Recently added Venues</h4>
+			<div class="">
+				{% for venue in venues %}
+				<div class=" tile tile-show">
+					<img src="{{venue.image_link}}" alt="venue" srcset="" style="width: 100%; height: 100%;">
+					<p> {{venue.name}} </p>
+					<p>{{venue.city}}, {{venue.state}}</p>
+				</div>
+				{% endfor %}
+			</div>
+		</section>
+	{% else %}	
+	{% endif %}
+	{% if artists%}
+		<section class="col-sm-6 tile-show">
+			<h4 style="text-align: left; font-size:1.5em;">Recently added Artists</h4>
+			<div class="">
+				{% for artist in artists %}
+				<div class=" tile tile-show">
+					<img src="{{artist.image_link}}" alt="artist" srcset="" style="width: 100%; height: 100%;">
+					<p> {{artist.name}} </p>
+					<p>{{artist.city}}, {{artist.state}}</p>
+				</div>
+				{% endfor %}
+			</div>
+		</section>
+	{%else%}	
+	{% endif %}
 </div>
 {% endblock %}

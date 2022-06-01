@@ -2,6 +2,25 @@
 {% block title %}{{ artist.name }} | Artist{% endblock %}
 {% block content %}
 <div class="row">
+	<!-- Toogle artist's availability based on if venue is seeking for venue -->
+	<div style="padding: 0 0 0 47%;
+		margin:20px 30px;height:fit-content;">
+		<p style='color: #ff8c3a;text-align: right;' >
+			{% if artist.seeking_venue %}
+				Available for booking
+			{% else %}	
+				Not available for booking
+			{% endif %}	
+		</p >
+		<a href="/artists/{{ artist.id }}/book" style="margin-left: 5em;">
+			<button class="btn btn-primary btn-lg" 
+			style="background-color:rgb(255,171,58);"
+			{% if artist.seeking_venue %} {%else%} disabled {% endif %} >
+				BOOK
+			</button>
+		</a>
+	</div>
+	
 	<div class="col-sm-6">
 		<h1 class="monospace">
 			{{ artist.name }}
@@ -21,7 +40,7 @@
 			<i class="fas fa-phone-alt"></i> {% if artist.phone %}{{ artist.phone }}{% else %}No Phone{% endif %}
         </p>
         <p>
-			<i class="fas fa-link"></i> {% if artist.website %}<a href="{{ artist.website }}" target="_blank">{{ artist.website }}</a>{% else %}No Website{% endif %}
+			<i class="fas fa-link"></i> {% if artist.website_link %}<a href="{{ artist.website_link }}" target="_blank">{{ artist.website_link }}</a>{% else %}No Website{% endif %}
 		</p>
 		<p>
 			<i class="fab fa-facebook-f"></i> {% if artist.facebook_link %}<a href="{{ artist.facebook_link }}" target="_blank">{{ artist.facebook_link }}</a>{% else %}No Facebook Link{% endif %}
@@ -73,6 +92,12 @@
 </section>
 
 <a href="/artists/{{ artist.id }}/edit"><button class="btn btn-primary btn-lg">Edit</button></a>
+<a href="/artists/{{artist.id}}/delete" >
+	<button class="btn btn-primary btn-lg" 
+	style="background-color:red; float: right; border: red;">
+		Delete
+	</button>
+</a>
 
 {% endblock %}
 
