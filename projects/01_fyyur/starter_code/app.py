@@ -211,7 +211,9 @@ def show_venue(venue_id):
   # data = list(filter(lambda d: d['id'] == venue_id, [data1, data2, data3]))[0]
   
   venue = models.Venue.query.get(venue_id)
-  shows = models.Show.query.filter_by(venue_id = venue_id).all()
+  today = datetime.now()
+  venue_past_shows = db.session.query(models.Show).join(models.Venue).filter(models.Show.venue_id == venue_id).filter(models.Show.start_time < today).all()
+  venue_upcoming_shows = db.session.query(models.Show).join(models.Venue).filter(models.Show.artist_id == venue_id).filter(models.Show.start_time > today).all()
   data = {
     "id" : venue.id,
     "name": venue.name,
@@ -230,29 +232,27 @@ def show_venue(venue_id):
     "upcoming_shows_count": 0,
   }
  
-  for show in shows:
-    today = datetime.now()
-    dateTime = show.start_time
-    if today > dateTime:
-      past_show_details = {
-        "artist_id": show.artist_id,
-        "artist_name": show.artist.name,
-        "artist_image_link": show.artist.image_link,
-        "start_time": str(show.start_time)
-        # "start_time": "2035-04-15T20:00:00.000Z"
-      }
-      data["past_shows"].append(past_show_details)
-    else:
-      upcoming_show_details = {
-        "artist_id": show.artist_id,
-        "artist_name": show.artist.name,
-        "artist_image_link": show.artist.image_link,
-        "start_time": str(show.start_time)
-        # "start_time": "2035-04-15T20:00:00.000Z"
-      }
-      data["upcoming_shows"].append(upcoming_show_details)
-  data['past_shows_count'] = len(data['past_shows'])
-  data['upcoming_shows_count'] = len(data['upcoming_shows'])    
+  for show in venue_past_shows:
+    print(show.artist)
+    past_show_details = {
+      "artist_id": show.artist_id,
+      "artist_name": show.artist.name,
+      "artist_image_link": show.artist.image_link,
+      "start_time": str(show.start_time)
+      # "start_time": "2035-04-15T20:00:00.000Z"
+    }
+    data["past_shows"].append(past_show_details)
+  for show in venue_upcoming_shows:  
+    upcoming_show_details = {
+      "artist_id": show.artist_id,
+      "artist_name": show.artist.name,
+      "artist_image_link": show.artist.image_link,
+      "start_time": str(show.start_time)
+      # "start_time": "2035-04-15T20:00:00.000Z"
+    }
+    data["upcoming_shows"].append(upcoming_show_details)
+  data['past_shows_count'] = len(venue_past_shows)
+  data['upcoming_shows_count'] = len(venue_upcoming_shows)    
   return render_template('pages/show_venue.html', venue=data)
 
 #  Create Venue
@@ -452,8 +452,10 @@ def show_artist(artist_id):
   #   "upcoming_shows_count": 3,
   # }
   # data = list(filter(lambda d: d['id'] == artist_id, [data1, data2, data3]))[0]
-  shows = models.Show.query.filter_by(artist_id = artist_id).all()
   artist = models.Artist.query.get(artist_id)
+  today = datetime.now()
+  artist_past_shows = db.session.query(models.Show).join(models.Artist).filter(models.Show.artist_id == artist_id).filter(models.Show.start_time < today).all()
+  artist_upcoming_shows = db.session.query(models.Show).join(models.Artist).filter(models.Show.artist_id == artist_id).filter(models.Show.start_time > today).all()
   data = {
     "id" : artist.id,
     "name" : artist.name,
@@ -470,30 +472,29 @@ def show_artist(artist_id):
     "past_shows_count": 0,
     "upcoming_shows_count" : 0
   }
-  for show in shows:
-    today = datetime.now()
-    dateTime = show.start_time
-    if today > dateTime:
-      past_show_details = {
-        "artist_id": show.artist_id,
-        "artist_name": show.artist.name,
-        "artist_image_link": show.artist.image_link,
-        "start_time": str(show.start_time)
-        # "start_time": "2035-04-15T20:00:00.000Z"
-      }
-      data["past_shows"].append(past_show_details)
-    else:
-      upcoming_show_details = {
-        "artist_id": show.artist_id,
-        "artist_name": show.artist.name,
-        "artist_image_link": show.artist.image_link,
-        "start_time": str(show.start_time)
-        # "start_time": "2035-04-15T20:00:00.000Z"
-      }
-      data["upcoming_shows"].append(upcoming_show_details)
+  for show in artist_past_shows:
+    print(show.venue)
+    past_show_details = {
+      "venue_id": show.venue_id,
+      "venue_name": show.venue.name,
+      "venue_image_link": show.venue.image_link,
+      "start_time": str(show.start_time)
+      # "start_time": "2035-04-15T20:00:00.000Z"
+    }
+    data["past_shows"].append(past_show_details)
 
-    data['past_shows_count'] = len(data['past_shows'])
-    data['upcoming_shows_count'] = len(data['upcoming_shows'])    
+  for show in artist_upcoming_shows:
+    upcoming_show_details = {
+      "venue_id": show.venue_id,
+      "venue_name": show.venue.name,
+      "venue_image_link": show.venue.image_link,
+      "start_time": str(show.start_time)
+      # "start_time": "2035-04-15T20:00:00.000Z"
+    }
+    data["upcoming_shows"].append(upcoming_show_details)
+
+  data['past_shows_count'] = len(artist_past_shows)
+  data['upcoming_shows_count'] = len(artist_upcoming_shows) 
   return render_template('pages/show_artist.html', artist=data)
 
 #  Update
@@ -767,9 +768,6 @@ def create_show_submission():
       artist = models.Artist.query.get(artist_id)
       if venue and artist:
         show = models.Show(artist_id=artist_id, venue_id=venue_id, start_time=form.start_time.data)
-        venue.show = show
-        artist.show = show
-        print(show)
         db.session.add(show)
         db.session.commit()
       else:
@@ -808,8 +806,6 @@ def book_venue_submission(venue_id):
       artist = models.Artist.query.get(artist_id)
       if venue and artist:
         show = models.Show(artist_id = artist_id, venue_id = venue_id, start_time = form.start_time.data)
-        venue.show = show
-        artist.show = show
         db.session.add(show)
         db.session.commit()
       else:
@@ -849,8 +845,6 @@ def book_artist_submission(artist_id):
       artist = models.Artist.query.get(artist_id)
       if venue and artist:
         show = models.Show(artist_id=artist_id, venue_id=venue_id, start_time=form.start_time.data)
-        venue.show = show
-        artist.show = show
         db.session.add(show)
         db.session.commit()
       else:

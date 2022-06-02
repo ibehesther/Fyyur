@@ -24,11 +24,10 @@ migrate = Migrate(app, db)
 class Show(db.Model):
   __tablename__ = 'Show'
   
-  artist_id = db.Column(db.Integer, db.ForeignKey('Artist.id'),
-            primary_key = True)
-  venue_id = db.Column(db.Integer, db.ForeignKey('Venue.id'),
-            primary_key = True)
-  start_time = db.Column(db.DateTime(), default=datetime.utcnow) 
+  id = db.Column(db.Integer, primary_key = True)
+  artist_id = db.Column(db.Integer, db.ForeignKey('Artist.id'), nullable = False)
+  venue_id = db.Column(db.Integer, db.ForeignKey('Venue.id'), nullable = False)
+  start_time = db.Column(db.DateTime(), default=datetime.utcnow, nullable = False) 
 
 
   def __repr__(self):

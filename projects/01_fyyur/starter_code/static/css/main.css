@@ -191,8 +191,23 @@ h2.monospace {
   height: 325px;
   margin-bottom: 15px;
 }
+.homepage-tile {
+  height: 400px;
+}
 .tile img {
   max-height: 200px;
+}
+.homepage-tile img {
+    width: 100%;
+    max-height: 300px;
+}
+.homepage-name {
+  font-size: 1.5em;
+  font-weight: 600;
+}
+.homepage-city {
+  font-size: 1.2em;
+  font-weight: 400;
 }
 .form-wrapper {
   max-width: 400px;
