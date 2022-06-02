@@ -727,7 +727,7 @@ def shows():
   #   "start_time": "2035-04-15T20:00:00.000Z"
   # }]
   data = []
-  shows = models.Show.query.all()
+  shows = models.Show.query.order_by(db.desc(models.Show.start_time)).all()
   for show in shows:
     venue = models.Venue.query.get(show.venue_id)
     artist = models.Artist.query.get(show.artist_id)
