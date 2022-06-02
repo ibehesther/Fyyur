@@ -1,6 +1,9 @@
 .vscode
 __pycache__
-venv
+/venv
+fyyur
+node_modules
+
 
 # OS generated files #
 ######################
