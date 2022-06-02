@@ -3,6 +3,7 @@ __pycache__
 venv
 fyyur/
 node_modules/
+migrations/
 
 
 # OS generated files #
