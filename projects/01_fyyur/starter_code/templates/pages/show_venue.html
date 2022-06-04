@@ -4,7 +4,7 @@
 <div class="row">
 	<!-- Toogle venue's availability based on if venue is seeking for talent -->
 	<div style=" padding: 0 0 0 47%;
-		margin:20px 30px;height:fit-content;">
+		margin:20px 30px;height:fit-content; position: relative;">
 		<p style='color: #ff8c3a; text-align: right;'>
 			{% if venue.seeking_talent%}
 				Available for booking
@@ -12,7 +12,7 @@
 				Not available for booking
 			{% endif %}	
 		</p >
-		<a href="/venues/{{ venue.id }}/book" style="margin-left: 5em;" >
+		<a href="/venues/{{ venue.id }}/book" style="position: absolute; right: 0;" >
 			<button class="btn btn-primary btn-lg" 
 			style="background-color:rgb(255,171,58);"
 			{% if venue.seeking_talent %} {%else%} disabled {% endif %} >

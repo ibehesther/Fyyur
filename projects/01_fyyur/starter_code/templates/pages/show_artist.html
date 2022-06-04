@@ -4,7 +4,7 @@
 <div class="row">
 	<!-- Toogle artist's availability based on if venue is seeking for venue -->
 	<div style="padding: 0 0 0 47%;
-		margin:20px 30px;height:fit-content;">
+		margin:20px 30px;height:fit-content;position: relative;">
 		<p style='color: #ff8c3a;text-align: right;' >
 			{% if artist.seeking_venue %}
 				Available for booking
@@ -12,7 +12,7 @@
 				Not available for booking
 			{% endif %}	
 		</p >
-		<a href="/artists/{{ artist.id }}/book" style="margin-left: 5em;">
+		<a href="/artists/{{ artist.id }}/book" style="position: absolute; right: 0;">
 			<button class="btn btn-primary btn-lg" 
 			style="background-color:rgb(255,171,58);"
 			{% if artist.seeking_venue %} {%else%} disabled {% endif %} >
