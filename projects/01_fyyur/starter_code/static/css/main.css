@@ -65,10 +65,10 @@ p.lead {
   margin-right: 15px;
 }
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.active>a {
-    background: none;
-    box-shadow: none;
-    color: black;
-    font-weight: bold;
+  background: none;
+  box-shadow: none;
+  color: black;
+  font-weight: bold;
 }
 .navbar-nav .search input {
   border-radius: 50px;
