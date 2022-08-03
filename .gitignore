@@ -4,7 +4,7 @@ venv
 fyyur/
 node_modules/
 migrations/
-
+hidden/
 
 # OS generated files #
 ######################
