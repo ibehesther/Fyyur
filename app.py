@@ -15,8 +15,7 @@ from forms import *
 from flask_migrate import Migrate
 
 import models as models 
-from models import app, db
-
+from models import app,  db
 
 
 db.create_all()
@@ -39,7 +38,7 @@ app.jinja_env.filters['datetime'] = format_datetime
 #----------------------------------------------------------------------------#
 # Controllers.
 #----------------------------------------------------------------------------#
-
+print("App", app)
 @app.route('/')
 def index():
   venues = models.Venue.query.order_by(db.desc('id')).limit(10).all()
