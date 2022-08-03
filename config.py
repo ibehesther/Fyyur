@@ -10,5 +10,8 @@ DEBUG = True
 
 
 # TODO IMPLEMENT DATABASE URL
-SQLALCHEMY_DATABASE_URI = 'postgresql://fsnd:fsnd@localhost:5432/fyyur-app'
+# Database URI for development
+# SQLALCHEMY_DATABASE_URI = 'postgresql://fsnd:fsnd@localhost:5432/fyyur-app'
+# Database uri for production
+SQLALCHEMY_DATABASE_URI= 'postgresql-crystalline-88147'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
