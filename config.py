@@ -4,7 +4,7 @@ SECRET_KEY = os.urandom(32)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 # Enable debug mode.
-DEBUG = True
+# DEBUG = True
 
 # Connect to the database
 
