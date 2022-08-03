@@ -76,4 +76,4 @@ class Artist(db.Model):
       return f'<Artist: id - {self.id}, name - {self.name}, city - {self.city}, genre - {self.genres}, seeking_venue - {self.seeking_venue} >'
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
 
-db.create_all()    
+# db.create_all()    
