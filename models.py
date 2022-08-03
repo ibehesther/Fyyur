@@ -77,3 +77,6 @@ class Artist(db.Model):
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
 
 # db.create_all()    
+if __name__ == '__main__':
+    app.debug = True
+    app.run()
